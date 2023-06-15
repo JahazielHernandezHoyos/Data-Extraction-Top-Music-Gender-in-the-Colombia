@@ -16,22 +16,28 @@ sp = spotipy.Spotify(client_credentials_manager=client_credentials_manager)
 
 def obtener_generos() -> List[str]:
     """
-    Obtiene todos los géneros posibles de Spotify.
+    Obtiene todos los géneros posibles de Spotify 🎶.
+
+    Returns:
+        List[str]: Una lista de strings con los géneros disponibles en Spotify.
     """
     genres = sp.recommendation_genre_seeds()["genres"]
     return genres
 
 
-def exportar_datos() -> True:
+def exportar_datos() -> bool:
     """
-    Exporta los datos de las canciones más populares de cada género en Colombia a archivos CSV.
+    Exporta los datos de las canciones más populares de cada género en Colombia a archivos CSV 📊.
+
+    Returns:
+        bool: True si la exportación de datos fue exitosa, False en caso contrario.
     """
     generos = obtener_generos()
     for genero in generos:
         results = sp.search(q=f'top colombia genre:"{genero}"', type="track", limit=50)
         tracks = results["tracks"]["items"]
         if tracks == []:
-            print(f"No se encontraron canciones para el género {genero}")
+            print(f"No se encontraron canciones para el género {genero} 🤷‍♂️")
             continue
         with open(f"{genero}.csv", "w", newline="", encoding="utf-8") as csvfile:
             writer = csv.writer(csvfile)
@@ -41,7 +47,7 @@ def exportar_datos() -> True:
                 name = track["name"]
                 popularity = track["popularity"]
                 writer.writerow([artist, name, popularity])
-        print(f"Se ha guardado el archivo {genero}.csv")
+        print(f"Se ha guardado el archivo {genero}.csv ✅")
     return True
 
 
